@@ -1,4 +1,5 @@
-MPI_FLAGS = -DUSE_MPI -I$(MPICH_DIR)/include
+#MPI_FLAGS = -DUSE_MPI -I$(MPICH_DIR)/include
+MPI_FLAGS =
 
 NVCC		= nvcc
 SM_VERSION ?= 90
@@ -9,21 +10,23 @@ RFLAGS 	= $(MPI_FLAGS) -O3 -DNDEBUG -lineinfo
 #SILO_INCLUDES := /usr/local/silo-4.8/include
 #SILO_LIBS := /usr/local/silo-4.8/lib
 
-LINKFLAGS = -L$(MPICH_DIR)/lib
-ifneq (,$(findstring mpich, $(MPICH_DIR)))
-   LINKFLAGS += -lmpich
-else ifneq (,$(findstring openmpi, $(MPICH_DIR)))
-	LINKFLAGS += -lopenmpi
-else
-	$(error Unsupported MPI library: $(MPICH_DIR))
-endif
+LINKFLAGS = $(FLAGS)
+#LINKFLAGS += -L$(MPICH_DIR)/lib
+#ifneq (,$(findstring mpich, $(MPICH_DIR)))
+#   LINKFLAGS += -lmpich
+#else ifneq (,$(findstring openmpi, $(MPICH_DIR)))
+#	LINKFLAGS += -lmpi
+#else
+#	$(error Unsupported MPI library: $(MPICH_DIR))
+#endif
 #LINKFLAGS += -L$(SILO_LIBS) -lsilo
 
 #INC_SILO:= -I$(SILO_INCLUDES)
 
 all: release
 
-debug: LINKFLAGS +=
+release:  LINKFLAGS += $(RFLAGS)
+debug:    LINKFLAGS += $(DFLAGS)
 
 release: 	FLAGS += $(RFLAGS)
 debug: 		FLAGS += $(DFLAGS)
