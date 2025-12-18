@@ -1,7 +1,8 @@
 MPI_FLAGS = -DUSE_MPI -I$(MPICH_DIR)/include
 
 NVCC		= nvcc
-FLAGS		= -arch=sm_90
+SM_VERSION ?= 90
+FLAGS		= -arch=sm_$(SM_VERSION)
 DFLAGS	= $(MPI_FLAGS) -lineinfo
 RFLAGS 	= $(MPI_FLAGS) -O3 -DNDEBUG -lineinfo
 
