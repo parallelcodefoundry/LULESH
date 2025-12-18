@@ -1,6 +1,6 @@
 MPI_FLAGS = -DUSE_MPI -I$(MPICH_DIR)/include
 
-NVCC		= nvcc -ccbin /opt/cray/xt-asyncpe/5.17/bin/CC
+NVCC		= nvcc
 FLAGS		= -arch=sm_90
 DFLAGS	= $(MPI_FLAGS) -lineinfo
 RFLAGS 	= $(MPI_FLAGS) -O3 -DNDEBUG -lineinfo
@@ -8,14 +8,14 @@ RFLAGS 	= $(MPI_FLAGS) -O3 -DNDEBUG -lineinfo
 #SILO_INCLUDES := /usr/local/silo-4.8/include
 #SILO_LIBS := /usr/local/silo-4.8/lib
 
-LINKFLAGS = -lmpich -L$(MPICH_DIR)/lib 
+LINKFLAGS = -lmpich -L$(MPICH_DIR)/lib
 #LINKFLAGS += -L$(SILO_LIBS) -lsilo
 
 #INC_SILO:= -I$(SILO_INCLUDES)
 
-all: release 
+all: release
 
-debug: LINKFLAGS += 
+debug: LINKFLAGS +=
 
 release: 	FLAGS += $(RFLAGS)
 debug: 		FLAGS += $(DFLAGS)
@@ -38,5 +38,5 @@ lulesh-comms.o: lulesh-comms.cu
 lulesh-comms-gpu.o: lulesh-comms-gpu.cu
 	$(NVCC) $(FLAGS) lulesh-comms-gpu.cu -I ./ -c -o lulesh-comms-gpu.o
 
-clean: 
+clean:
 	rm -rf allocator.o lulesh-comms.o lulesh-comms-gpu.o lulesh.o lulesh xyz.asc regNumList.txt
