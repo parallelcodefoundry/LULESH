@@ -9,7 +9,14 @@ RFLAGS 	= $(MPI_FLAGS) -O3 -DNDEBUG -lineinfo
 #SILO_INCLUDES := /usr/local/silo-4.8/include
 #SILO_LIBS := /usr/local/silo-4.8/lib
 
-LINKFLAGS = -lmpich -L$(MPICH_DIR)/lib
+LINKFLAGS = -L$(MPICH_DIR)/lib
+ifneq (,$(findstring mpich, $(MPICH_DIR)))
+   LINKFLAGS += -lmpich
+else ifneq (,$(findstring openmpi, $(MPICH_DIR)))
+	LINKFLAGS += -lopenmpi
+else
+	$(error Unsupported MPI library: $(MPICH_DIR))
+endif
 #LINKFLAGS += -L$(SILO_LIBS) -lsilo
 
 #INC_SILO:= -I$(SILO_INCLUDES)
