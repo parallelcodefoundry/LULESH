@@ -3691,6 +3691,7 @@ void CalcMonotonicQRegionForElems(Domain *domain)
     //cudaCheckError();
 }
 
+// >>> START EDITABLE REGION
 static 
 __device__ __forceinline__
 void CalcPressureForElems_device(
@@ -4027,6 +4028,7 @@ void ApplyMaterialPropertiesAndUpdateVolume_kernel(
 
   }
 }
+// <<< END EDITABLE REGION
 
 static inline
 void ApplyMaterialPropertiesAndUpdateVolume(Domain *domain)
