@@ -3691,7 +3691,7 @@ void CalcMonotonicQRegionForElems(Domain *domain)
     //cudaCheckError();
 }
 
-// >>> START EDITABLE REGION
+// >>> START EDITABLE REGION ID=0
 static 
 __device__ __forceinline__
 void CalcPressureForElems_device(
@@ -4028,7 +4028,6 @@ void ApplyMaterialPropertiesAndUpdateVolume_kernel(
 
   }
 }
-// <<< END EDITABLE REGION
 
 static inline
 void ApplyMaterialPropertiesAndUpdateVolume(Domain *domain)
@@ -4073,6 +4072,7 @@ void ApplyMaterialPropertiesAndUpdateVolume(Domain *domain)
     //cudaCheckError();
   }
 }
+// <<< END EDITABLE REGION ID=0
 
 static inline
 void LagrangeElements(Domain *domain)
