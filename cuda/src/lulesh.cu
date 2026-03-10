@@ -4041,6 +4041,8 @@ void ApplyMaterialPropertiesAndUpdateVolume_kernel(
 // <<< END EDITABLE REGION ID=6
 
 // >>> START EDITABLE REGION ID=7
+static Index_t g_ApplyMaterialProperties_block_size = 128;
+
 static inline
 void ApplyMaterialPropertiesAndUpdateVolume(Domain *domain)
 {
@@ -4048,7 +4050,7 @@ void ApplyMaterialPropertiesAndUpdateVolume(Domain *domain)
 
   if (length != 0) {
 
-    Index_t dimBlock = 128;
+    Index_t dimBlock = g_ApplyMaterialProperties_block_size;
     Index_t dimGrid = PAD_DIV(length,dimBlock);
 
     ApplyMaterialPropertiesAndUpdateVolume_kernel<<<dimGrid,dimBlock>>>
@@ -4400,10 +4402,12 @@ void LagrangeLeapFrog(Domain* domain)
 void printUsage(char* argv[])
 {
   printf("Usage: \n");
-  printf("Unstructured grid:  %s -u <file.lmesh> \n", argv[0]) ;
-  printf("Structured grid:    %s -s numEdgeElems \n", argv[0]) ;
+  printf("Unstructured grid:  %s -u <file.lmesh> [-b blockSize]\n", argv[0]) ;
+  printf("Structured grid:    %s -s numEdgeElems [-b blockSize]\n", argv[0]) ;
+  printf("  -b blockSize   Block size for ApplyMaterialPropertiesAndUpdateVolume kernel (default: 128)\n");
   printf("\nExamples:\n") ;
   printf("%s -s 45\n", argv[0]) ;
+  printf("%s -s 45 -b 256\n", argv[0]) ;
   printf("%s -u sedov15oct.lmesh\n", argv[0]) ;
 }
 
@@ -4709,8 +4713,13 @@ int main(int argc, char *argv[])
   }
 
   int num_iters = -1;
-  if (argc == 5) {
-    num_iters = atoi(argv[4]);
+  for (int i = 3; i < argc; i++) {
+    if (strcmp(argv[i], "-b") == 0 && i + 1 < argc) {
+      g_ApplyMaterialProperties_block_size = (Index_t)atoi(argv[i + 1]);
+      i++;
+    } else if (num_iters == -1) {
+      num_iters = atoi(argv[i]);
+    }
   }
 
   bool structured = ( strcmp(argv[1],"-s") == 0 );

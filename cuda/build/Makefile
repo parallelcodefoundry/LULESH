@@ -3,9 +3,14 @@ MPI_FLAGS =
 
 NVCC		= nvcc
 SM_VERSION ?= 90
-FLAGS		= -arch=sm_$(SM_VERSION)
-DFLAGS	= $(MPI_FLAGS) -lineinfo
-RFLAGS 	= $(MPI_FLAGS) -O3 -DNDEBUG -lineinfo
+REG_COUNT  ?=
+FLAGS		= -arch=sm_$(SM_VERSION) -lineinfo
+DFLAGS	= $(MPI_FLAGS)
+RFLAGS 	= $(MPI_FLAGS) -O3 -DNDEBUG
+
+ifneq ($(REG_COUNT),)
+	FLAGS += -maxrregcount=$(REG_COUNT)
+endif
 
 #SILO_INCLUDES := /usr/local/silo-4.8/include
 #SILO_LIBS := /usr/local/silo-4.8/lib
