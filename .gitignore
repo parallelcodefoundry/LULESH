@@ -1,3 +1,7 @@
 *.o
 xyz.asc
 lulesh
+
+# Large reference output (50MB) — regenerate with:
+#   cd cuda/src && ./lulesh -s 100 && cp xyz.asc s100-ref-xyz.asc
+cuda/src/s100-ref-xyz.asc
